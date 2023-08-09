@@ -31,9 +31,10 @@ class SalesforceMarketingTest {
         ETClient client = new ETClient(conf);
 
         ETContentArea ca = new ETContentArea();
-        ca.setName("CA_YPL_07");
+        ca.setName("CA_YPL_08");
         ca.setContent("<b>Hello!</b>>");
         ETResponse<ETContentArea> createCAResponse = client.create(ca);
+        // /!\ for some entities createCAResponse.getResponseCode() returns "200", for some others "OK"
         Assertions.assertEquals("OK", createCAResponse.getResponseCode());
 
         ETResponse<ETContentArea> retrieveCAResponse = client.retrieve(ETContentArea.class);
