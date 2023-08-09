@@ -29,7 +29,7 @@ class SalesforceMarketingTest {
         conf.set("authEndpoint", prop.getProperty("authent_url"));
         conf.set("useOAuth2Authentication", "true");
         ETClient client = new ETClient(conf);
-        Z
+
         ETContentArea ca = new ETContentArea();
         ca.setName("CA_YPL_07");
         ca.setContent("<b>Hello!</b>>");
