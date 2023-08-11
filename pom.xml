@@ -17,6 +17,7 @@
     <maven.compiler.target>8</maven.compiler.target>
     <junit-jupiter-api.version>5.9.1</junit-jupiter-api.version>
     <lombok.version>1.18.28</lombok.version>
+    <jackson-core.version>2.12.3</jackson-core.version>
   </properties>
 
   <dependencies>
@@ -30,6 +31,21 @@
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson-core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson-core.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

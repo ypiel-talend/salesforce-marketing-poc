@@ -11,6 +11,7 @@ import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSoapObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -109,6 +111,10 @@ class SalesforceMarketingTest {
             System.out.println(e);
         }
 
+        String file = "/tmp/SFMC_Entities.json";
+        System.out.println("Write all entities in a json file: " + file);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(new File(file), entities);
 
         System.out.println("END");
     }
@@ -147,6 +153,9 @@ class SalesforceMarketingTest {
     @Data
     public static class EntityDesc {
         private final Class clazz;
+
+        private Type type;
+        private String name;
         private List<EntityAttribute> attributes;
 
         enum Type {
@@ -156,10 +165,12 @@ class SalesforceMarketingTest {
 
         public EntityDesc(Class clazz) {
             this.clazz = clazz;
-            computeAttributes();
+            this.attributes = this.computeAttributes();
+            this.type = this.computeType();
+            this.name = this.computeName();
         }
 
-        public Type getType() {
+        private Type computeType() {
             if (ETSoapObject.class.isAssignableFrom(this.getClazz())) {
                 return Type.SOAP;
             } else if (ETRestObject.class.isAssignableFrom(this.getClazz())) {
@@ -169,8 +180,8 @@ class SalesforceMarketingTest {
             throw new RuntimeException("This entity doesn't extends nor SOAP not REST : " + this.clazz.getName());
         }
 
-        private void computeAttributes() {
-            this.attributes = Arrays.stream(this.clazz.getDeclaredMethods())
+        private List<EntityAttribute> computeAttributes() {
+            return Arrays.stream(this.clazz.getDeclaredMethods())
                     // Only setter
                     .filter(m -> m.getName().startsWith("set") &&
                             m.getReturnType().equals(void.class) &&
@@ -192,7 +203,7 @@ class SalesforceMarketingTest {
 
         }
 
-        String getName() {
+        private String computeName() {
             return this.clazz.getSimpleName();
         }
 
