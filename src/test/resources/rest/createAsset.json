@@ -1,0 +1,10 @@
+{
+  "Name": "__NAME__",
+  "AssetType": {
+    "Id": __ASSET_TYPE_ID__,
+    "Name": "__ASSERT_TYPE_NAME__"
+  },
+  "Data": {
+    "message": "__MSG__"
+  }
+}

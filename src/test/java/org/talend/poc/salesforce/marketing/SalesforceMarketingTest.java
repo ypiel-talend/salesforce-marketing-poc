@@ -1,5 +1,6 @@
 package org.talend.poc.salesforce.marketing;
 
+import com.exacttarget.fuelsdk.ETAsset;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETContentArea;
@@ -11,9 +12,17 @@ import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSoapObject;
+import com.exacttarget.fuelsdk.ETUnsubEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.spi.LoggerContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,6 +34,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,30 +47,42 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
-class SalesforceMarketingTest {
+class SalesforceMarketingTest extends AbstractTest {
 
-    private static ETConfiguration conf;
+    @Test
+    public void listAssetTypes() throws ETSdkException {
+        ETClient client = new ETClient(this.getConf());
 
-    @BeforeAll
-    public static void loadConf() throws IOException {
-        Properties prop = new Properties();
-        prop.load(new FileInputStream("/tmp/salesforce.properties"));
+    }
 
-        conf = new ETConfiguration();
-        conf.set("clientId", prop.getProperty("client_id"));
-        conf.set("clientSecret", prop.getProperty("client_secret"));
-        conf.set("endpoint", prop.getProperty("rest_url"));
-        conf.set("soapEndpoint", prop.getProperty("soap_url"));
-        conf.set("authEndpoint", prop.getProperty("authent_url"));
-        conf.set("useOAuth2Authentication", "true");
+
+    @Test
+    public void createAsset() throws ETSdkException, IOException {
+        ETClient client = new ETClient(this.getConf());
+
+        ETAsset asset = new ETAsset();
+        asset.setName("First Test");
+        asset.setContent("Hello world!");
+
+        asset.setContentType("text/plain");
+
+        ETResponse<ETAsset> etAssetETResponse = client.create(asset);
+
+        System.out.println("Response code : " + etAssetETResponse.getResults().get(0).getResponseCode());
+        System.out.println("Response error code : " + etAssetETResponse.getResults().get(0).getErrorCode());
+        System.out.println("Response status : " + etAssetETResponse.getResults().get(0).getStatus());
+        System.out.println("Response message : " + etAssetETResponse.getResults().get(0).getResponseMessage());
+        // The real error message is not returned, but only logged:
+        // https://github.com/salesforce-marketingcloud/FuelSDK-Java/blob/bcc6960301ccbfbd2281c91e74078078eae38574/src/main/java/com/exacttarget/fuelsdk/ETRestObject.java#L432
+        System.out.println("Response error message : " + etAssetETResponse.getResults().get(0).getErrorMessage());
     }
 
     @Test
     public void createRetrieveContentAreaWithFuelSDK() throws ETSdkException {
-        ETClient client = new ETClient(conf);
+        ETClient client = new ETClient(this.getConf());
 
         ETContentArea ca = new ETContentArea();
-        ca.setName("CA_YPL_09");
+        ca.setName("CA_YPL_11");
         ca.setContent("<b>Hello!</b>>");
         ETResponse<ETContentArea> createCAResponse = client.create(ca);
         // /!\ for some entities createCAResponse.getResponseCode() returns "200", for some others "OK"
@@ -76,11 +99,11 @@ class SalesforceMarketingTest {
 
     @Test
     public void retrieveContentAreaWithFilter() throws ETSdkException {
-        ETClient client = new ETClient(conf);
+        ETClient client = new ETClient(this.getConf());
 
         ETExpression exp = new ETExpression();
         exp.setProperty("name");
-        exp.setValue("CA_YPL_08");
+        exp.setValue("CA_YPL_09");
         exp.setOperator(ETExpression.Operator.EQUALS);
 
         ETFilter filter = new ETFilter();
@@ -90,6 +113,12 @@ class SalesforceMarketingTest {
         displayContentArea(retrieveCAResponse);
 
         System.out.println("End.");
+    }
+
+    @Test
+    public void createUnsubEvent() {
+        ETUnsubEvent etUnsubEvent = new ETUnsubEvent();
+        //etUnsubEvent.setList();
     }
 
     @Test
