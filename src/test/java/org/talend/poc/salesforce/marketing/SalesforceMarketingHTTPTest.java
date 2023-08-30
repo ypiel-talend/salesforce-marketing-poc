@@ -1,7 +1,6 @@
 package org.talend.poc.salesforce.marketing;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -16,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalasforceMarketingHTTPTest extends AbstractTest {
+public class SalesforceMarketingHTTPTest extends AbstractTest {
 
     @Test
     public void retrieveAssetCategories() throws IOException, InterruptedException {
