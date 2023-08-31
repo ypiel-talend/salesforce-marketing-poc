@@ -18,6 +18,8 @@
     <junit-jupiter-api.version>5.9.1</junit-jupiter-api.version>
     <lombok.version>1.18.28</lombok.version>
     <jackson-core.version>2.12.3</jackson-core.version>
+    <cxf.version>4.0.1</cxf.version>
+    <cxf-codegen-plugin.version>3.5.5</cxf-codegen-plugin.version>
   </properties>
 
   <dependencies>
@@ -25,6 +27,11 @@
       <groupId>com.github.salesforce-marketingcloud</groupId>
       <artifactId>fuelsdk</artifactId>
       <version>1.6.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+      <version>${cxf.version}</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -76,6 +83,35 @@
           <source>11</source>
           <target>11</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <version>${cxf-codegen-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <sourceRoot>${basedir}/src/main/java/</sourceRoot>
+              <wsdlOptions>
+                <wsdlOption>
+                  <wsdl>${basedir}/src/main/resources/SalesforceMarketing.wsdl</wsdl>
+                  <bindingFiles>
+                    <bindingFile>${basedir}/src/main/resources/CXFBindings.xml</bindingFile>
+                  </bindingFiles>
+                  <extraargs>
+                    <extraarg>-p</extraarg>
+                    <extraarg>org.talend.poc.salesforce.marketing.generated</extraarg>
+                  </extraargs>
+                </wsdlOption>
+              </wsdlOptions>
+            </configuration>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

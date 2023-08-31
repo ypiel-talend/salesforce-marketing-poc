@@ -37,6 +37,40 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
     }
 
     @Test
+    public void clientInstance(){
+       /* GZIPFeature gzip = new GZIPFeature();
+        gzip.setThreshold(1);
+        JaxWsProxyFactoryBean factory = new
+                JaxWsProxyFactoryBean();
+        factory.getFeatures().add(gzip);
+        factory.getInInterceptors().add(new LoggingInInterceptor());
+        factory.getOutInterceptors().add(new
+                LoggingOutInterceptor());
+        PartnerAPI service = new PartnerAPI();
+        Soap s = service.getSoap();
+        Client client = org.apache.cxf.frontend.ClientProxy.getClient(s);
+        Map outProps = new HashMap();
+        outProps.put(WSHandlerConstants.ACTION,
+                WSHandlerConstants.USERNAME_TOKEN);
+        outProps.put(WSHandlerConstants.USER,PropertiesUtil.getInstance().getProperty("username"));
+        System.out.println(PropertiesUtil.getInstance().getProperty("username"));
+        outProps.put(WSHandlerConstants.PASSWORD_TYPE,WSConstants.PW_TEXT);
+        // Automatically adds a Base64 encoded message nonce and a created timestamp
+        outProps.put(WSHandlerConstants.ADD_UT_ELEMENTS,WSConstants.NONCE_LN + " " + WSConstants.CREATED_LN);
+        outProps.put(WSHandlerConstants.PW_CALLBACK_CLASS,
+
+                ClientPasswordCallback.class.getName());
+        WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
+        client.getOutInterceptors().add(wssOut);
+        //Enable GZip compression
+        Map<String, java.util.List<String httpHeaders = new HashMap<String, java.util.List<String();
+        httpHeaders.put("Content-Encoding",Collections.singletonList("gzip"));
+        httpHeaders.put("Accept-Encoding",Collections.singletonList("gzip"));
+        Map<String, Object> reqContext = client.getRequestContext();
+        reqContext.put(MessageContext.HTTP_REQUEST_HEADERS,httpHeaders); */
+    }
+
+    @Test
     public void getAccounts(){
 
     }
