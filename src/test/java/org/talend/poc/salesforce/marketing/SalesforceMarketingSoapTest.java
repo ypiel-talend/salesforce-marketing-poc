@@ -2,9 +2,17 @@ package org.talend.poc.salesforce.marketing;
 
 
 import org.junit.jupiter.api.Test;
+import org.talend.poc.salesforce.marketing.generated.PartnerAPI;
+import org.talend.poc.salesforce.marketing.generated.RetrieveRequest;
+import org.talend.poc.salesforce.marketing.generated.RetrieveRequestMsg;
+import org.talend.poc.salesforce.marketing.generated.RetrieveResponseMsg;
+import org.talend.poc.salesforce.marketing.generated.SalesforceMarketingSOAP;
 
+import javax.xml.namespace.QName;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -37,7 +45,25 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
     }
 
     @Test
-    public void clientInstance(){
+    public void cxfSOAPCall() throws MalformedURLException {
+        URL resource = SalesforceMarketingSOAP.class.getResource("/SalesforceMarketing.wsdl");
+        PartnerAPI partnerAPI = new PartnerAPI(resource,
+                new QName("http://exacttarget.com/wsdl/partnerAPI", "PartnerAPI"));
+
+        SalesforceMarketingSOAP salesforceMarketingSOAP = partnerAPI.getPort(SalesforceMarketingSOAP.class);
+
+
+        /*RetrieveRequest retrieveRequest = new RetrieveRequest();
+        retrieveRequest.setObjectType("Asset");
+        RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
+        retrieveRequestMsg.setRetrieveRequest(retrieveRequest);
+        RetrieveResponseMsg retrieve = partnerAPI.getSoap().retrieve(retrieveRequestMsg);*/
+
+        System.out.println("End.");
+    }
+
+    @Test
+    public void clientInstance() {
        /* GZIPFeature gzip = new GZIPFeature();
         gzip.setThreshold(1);
         JaxWsProxyFactoryBean factory = new
@@ -71,7 +97,7 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
     }
 
     @Test
-    public void getAccounts(){
+    public void getAccounts() {
 
     }
 
