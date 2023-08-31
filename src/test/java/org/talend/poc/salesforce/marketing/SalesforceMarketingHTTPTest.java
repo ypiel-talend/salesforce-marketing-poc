@@ -53,7 +53,7 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
     @Test
     public void createAsset() throws IOException, InterruptedException {
         String token = retrieveTokenOAUTHClientCredentials();
-         createAsset_(token,"third", "33333", 3, "Categ 3");
+         createAsset_(token,"Fourth", "4444", 1);
     }
 
     /**
@@ -108,14 +108,14 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
         return assetList;
     }
 
-    private void createAsset_(String token, String name, String data, int typeId, String typeName) throws IOException, InterruptedException {
+    private void createAsset_(String token, String name, String data, int typeId) throws IOException, InterruptedException {
         System.out.println("Create asset...");
 
         String payload = loadResource("/rest/createAsset.json");
         payload = payload.replace("__NAME__", name);
         payload = payload.replace("__MSG__", data);
         payload = payload.replace("__ASSET_TYPE_ID__", String.valueOf(typeId));
-        payload = payload.replace("__ASSERT_TYPE_NAME__", typeName);
+        //payload = payload.replace("__ASSERT_TYPE_NAME__", typeName);
 
         String rest_endpoint = this.getConf().get("endpoint") + "asset/v1/content/assets";
 
@@ -194,7 +194,7 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
     public static class Asset {
         private int id;
         private String name;
-        private AssetType type;
+        private AssetType assetType;
         private CreatedBy createdBy;
         private NestedData data;
     }

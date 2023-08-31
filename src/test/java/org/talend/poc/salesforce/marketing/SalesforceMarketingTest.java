@@ -26,6 +26,7 @@ import org.apache.logging.log4j.spi.LoggerContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.talend.poc.salesforce.marketing.workaround.ETAssetFixed;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,6 +51,13 @@ import java.util.stream.Collectors;
 class SalesforceMarketingTest extends AbstractTest {
 
     @Test
+    public void listAccounts() throws ETSdkException {
+        ETClient client = new ETClient(this.getConf());
+
+
+    }
+
+    @Test
     public void listAssetTypes() throws ETSdkException {
         ETClient client = new ETClient(this.getConf());
 
@@ -60,16 +68,20 @@ class SalesforceMarketingTest extends AbstractTest {
     public void createAsset() throws ETSdkException, IOException {
         ETClient client = new ETClient(this.getConf());
 
-        ETAsset asset = new ETAsset();
-        asset.setName("First Test");
-        asset.setContent("Hello world!");
+        ETAssetFixed.AssetType assetType = new ETAssetFixed.AssetType();
+        assetType.setId(2);
 
+        ETAssetFixed asset = new ETAssetFixed();
+        asset.setName("Asset Test 1");
+        asset.setContent("Asset Test 1 content");
         asset.setContentType("text/plain");
+        asset.setAssetType(assetType);
 
         ETResponse<ETAsset> etAssetETResponse = client.create(asset);
+        System.out.println("Response error code : " + etAssetETResponse.getResults().get(0).getErrorCode());
+
 
         System.out.println("Response code : " + etAssetETResponse.getResults().get(0).getResponseCode());
-        System.out.println("Response error code : " + etAssetETResponse.getResults().get(0).getErrorCode());
         System.out.println("Response status : " + etAssetETResponse.getResults().get(0).getStatus());
         System.out.println("Response message : " + etAssetETResponse.getResults().get(0).getResponseMessage());
         // The real error message is not returned, but only logged:
