@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -14,16 +15,20 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+@Disabled
 public class SalesforceMarketingHTTPTest extends AbstractTest {
 
     @Test
     public void retrieveAssetCategories() throws IOException, InterruptedException {
+        Properties prop = loadConf();
+
         String token = retrieveTokenOAUTHClientCredentials();
 
         System.out.println("Retrieve assets categories...");
 
-        String rest_endpoint = this.getConf().get("endpoint") + "asset/v1/content/categories?$page=1&$pagesize=100";
+        String rest_endpoint = prop.getProperty("rest_url") + "asset/v1/content/categories?$page=1&$pagesize=100";
         System.out.println("Query : " + rest_endpoint);
 
         HttpClient client = HttpClient.newHttpClient();
@@ -75,7 +80,9 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
     private List<Asset> retrieveAssets(String token) throws IOException, InterruptedException {
         System.out.println("Retrieve campaigns...");
 
-        String rest_endpoint = this.getConf().get("endpoint") + "asset/v1/content/assets?$page=1&$pageSize=50";
+        Properties prop = loadConf();
+
+        String rest_endpoint = prop.getProperty("rest_url") + "asset/v1/content/assets?$page=1&$pageSize=50";
         System.out.println("Query : " + rest_endpoint);
 
         HttpClient client = HttpClient.newHttpClient();
@@ -111,13 +118,15 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
     private void createAsset_(String token, String name, String data, int typeId) throws IOException, InterruptedException {
         System.out.println("Create asset...");
 
+        Properties prop = loadConf();
+
         String payload = loadResource("/rest/createAsset.json");
         payload = payload.replace("__NAME__", name);
         payload = payload.replace("__MSG__", data);
         payload = payload.replace("__ASSET_TYPE_ID__", String.valueOf(typeId));
         //payload = payload.replace("__ASSERT_TYPE_NAME__", typeName);
 
-        String rest_endpoint = this.getConf().get("endpoint") + "asset/v1/content/assets";
+        String rest_endpoint = prop.getProperty("rest_url") + "asset/v1/content/assets";
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -146,10 +155,13 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
      */
     private String retrieveTokenOAUTHClientCredentials() throws IOException, InterruptedException {
         System.out.println("* Retrieve token...");
+
+        Properties prop = loadConf();
+
         HttpClient client = HttpClient.newHttpClient();
 
-        String clientId = this.getConf().get("clientId");
-        String clientSecret = this.getConf().get("clientSecret");
+        String clientId = prop.getProperty("client_id");
+        String clientSecret = prop.getProperty("client_secret");
 
         String payload = "{\n" +
                 "\"grant_type\": \"client_credentials\",\n" +
@@ -157,7 +169,7 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
                 "\"client_secret\": \"" + clientSecret + "\"\n" +
                 "}";
 
-        String authEndpoint = this.getConf().get("authEndpoint") + "v2/token";
+        String authEndpoint = prop.getProperty("authent_url") + "v2/token";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(authEndpoint))
                 .header("Content-Type", "application/json")

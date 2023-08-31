@@ -6,7 +6,6 @@ import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETContentArea;
 import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETFilter;
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETResult;
@@ -15,31 +14,17 @@ import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.ETUnsubEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.ConfigurationSource;
-import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.spi.LoggerContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.talend.poc.salesforce.marketing.workaround.ETAssetFixed;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
@@ -48,7 +33,27 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
+@Disabled
 class SalesforceMarketingTest extends AbstractTest {
+
+    private static ETConfiguration conf;
+
+    @BeforeAll
+    public static void before() throws IOException {
+        Properties prop = loadConf();
+
+        conf = new ETConfiguration();
+        conf.set("clientId", prop.getProperty("client_id"));
+        conf.set("clientSecret", prop.getProperty("client_secret"));
+        conf.set("endpoint", prop.getProperty("rest_url"));
+        conf.set("soapEndpoint", prop.getProperty("soap_url"));
+        conf.set("authEndpoint", prop.getProperty("authent_url"));
+        conf.set("useOAuth2Authentication", "true");
+    }
+
+    protected ETConfiguration getConf(){
+        return conf;
+    }
 
     @Test
     public void listAccounts() throws ETSdkException {
@@ -67,7 +72,6 @@ class SalesforceMarketingTest extends AbstractTest {
     @Test
     public void createAsset() throws ETSdkException, IOException {
         ETClient client = new ETClient(this.getConf());
-
         ETAssetFixed.AssetType assetType = new ETAssetFixed.AssetType();
         assetType.setId(2);
 

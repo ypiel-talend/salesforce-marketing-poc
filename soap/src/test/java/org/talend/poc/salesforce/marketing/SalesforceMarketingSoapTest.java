@@ -1,6 +1,7 @@
 package org.talend.poc.salesforce.marketing;
 
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.talend.poc.salesforce.marketing.generated.PartnerAPI;
 import org.talend.poc.salesforce.marketing.generated.RetrieveRequest;
@@ -19,12 +20,15 @@ import java.net.http.HttpResponse;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Properties;
 
 public class SalesforceMarketingSoapTest extends AbstractTest {
 
+    @Disabled
     @Test
     public void getWSDL() throws IOException, InterruptedException {
-        String soap_endpoint = this.getConf().get("soapEndpoint");
+        Properties prop = loadConf();
+        String soap_endpoint = prop.getProperty("soap_url");
         String soap_wsdl = soap_endpoint + "etframework.wsdl";
 
         HttpClient client = HttpClient.newHttpClient();
@@ -46,7 +50,7 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
 
     @Test
     public void cxfSOAPCall() throws MalformedURLException {
-        URL resource = SalesforceMarketingSOAP.class.getResource("/SalesforceMarketing.wsdl");
+        URL resource = SalesforceMarketingSoapTest.class.getResource("/SalesforceMarketing.wsdl");
         PartnerAPI partnerAPI = new PartnerAPI(resource,
                 new QName("http://exacttarget.com/wsdl/partnerAPI", "PartnerAPI"));
 
