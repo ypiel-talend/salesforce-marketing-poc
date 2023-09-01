@@ -21,6 +21,25 @@ import java.util.Properties;
 public class SalesforceMarketingHTTPTest extends AbstractTest {
 
     @Test
+    public void testSOAPEndpoint() throws IOException, InterruptedException {
+        String soap_endpoint = "https://mcdv401kqx42cnv6krgbpclm-h-0.soap.marketingcloudapis.com/Service.asmx";
+
+        String token = retrieveTokenOAUTHClientCredentials();
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(soap_endpoint))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println("Status : " + response.statusCode() + "\n Body: " + response.body());
+
+    }
+
+    @Test
     public void retrieveAssetCategories() throws IOException, InterruptedException {
         Properties prop = loadConf();
 
@@ -47,7 +66,7 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response.body());
         JsonNode items = root.get("items");
-        for(JsonNode elt : items){
+        for (JsonNode elt : items) {
             System.out.println(String.format("%s: %s - %s", elt.get("id"), elt.get("name").asText(), elt.get("description").asText()));
         }
 
@@ -58,7 +77,7 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
     @Test
     public void createAsset() throws IOException, InterruptedException {
         String token = retrieveTokenOAUTHClientCredentials();
-         createAsset_(token,"Fourth", "4444", 1);
+        createAsset_(token, "Fourth", "4444", 1);
     }
 
     /**
@@ -71,7 +90,7 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
     public void retrieveAssets() throws IOException, InterruptedException {
         String token = retrieveTokenOAUTHClientCredentials();
         List<Asset> assetList = retrieveAssets(token);
-        for(Asset a : assetList){
+        for (Asset a : assetList) {
             System.out.println("\t - " + a);
         }
     }
@@ -105,7 +124,7 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response.body());
         JsonNode items = root.get("items");
-        for(JsonNode elt : items){
+        for (JsonNode elt : items) {
             Asset asset = objectMapper.treeToValue(elt, Asset.class);
             assetList.add(asset);
         }
