@@ -29,8 +29,6 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(soap_endpoint))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -77,7 +75,7 @@ public class SalesforceMarketingHTTPTest extends AbstractTest {
     @Test
     public void createAsset() throws IOException, InterruptedException {
         String token = retrieveTokenOAUTHClientCredentials();
-        createAsset_(token, "Fourth", "4444", 1);
+        createAsset_(token, "WWWW", "wwww", 1);
     }
 
     /**
