@@ -34,6 +34,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="Owner" type="{http://exacttarget.com/wsdl/partnerAPI}Owner" minOccurs="0"/&gt;
  *         &lt;element name="CorrelationID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="ObjectState" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="IsPlatformObject" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -54,7 +55,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "customerKey",
     "owner",
     "correlationID",
-    "objectState"
+    "objectState",
+    "isPlatformObject"
 })
 @XmlSeeAlso({
     ContentValidation.class,
@@ -180,6 +182,8 @@ public class APIObject {
     protected String correlationID;
     @XmlElement(name = "ObjectState")
     protected String objectState;
+    @XmlElement(name = "IsPlatformObject")
+    protected Boolean isPlatformObject;
 
     /**
      * Gets the value of the client property.
@@ -448,6 +452,30 @@ public class APIObject {
      */
     public void setObjectState(String value) {
         this.objectState = value;
+    }
+
+    /**
+     * Gets the value of the isPlatformObject property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsPlatformObject() {
+        return isPlatformObject;
+    }
+
+    /**
+     * Sets the value of the isPlatformObject property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsPlatformObject(Boolean value) {
+        this.isPlatformObject = value;
     }
 
 }

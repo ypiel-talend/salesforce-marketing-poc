@@ -171,7 +171,7 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
         asset.setName("SOAP Asset 1");
         asset.setContent("A content from SOAP.");
 
-        QName qName = new QName("http://www.example.com", "myElement");
+        QName qName = new QName("http://exacttarget.com/wsdl/partnerAPI", "Id");
         NameIdReference nameIdReference = new NameIdReference();
         JAXBElement<Long> longJAXBElement = new JAXBElement<Long>(qName, Long.class, 1L);
         nameIdReference.setId(longJAXBElement);

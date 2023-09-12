@@ -1,0 +1,4 @@
+org/talend/poc/salesforce/marketing/SalesforceMarketingSoapTest$DisplayXMLInterceptor.class
+org/talend/poc/salesforce/marketing/SalesforceMarketingSoapTest$MyOutInterceptor.class
+org/talend/poc/salesforce/marketing/SalesforceMarketingSoapTest.class
+org/talend/poc/salesforce/marketing/SalesforceMarketingSoapTest$OAuthResponse.class

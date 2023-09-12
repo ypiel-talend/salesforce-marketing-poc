@@ -53,7 +53,7 @@
     <build>
         <plugins>
             <!-- ***** UNCOMMENT to generate code from WSDL -->
-            <!-- plugin>
+            <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
                 <version>${cxf-codegen-plugin.version}</version>
@@ -81,7 +81,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin -->
+            </plugin>
         </plugins>
     </build>
 

@@ -1,0 +1,1 @@
+[-b, file:/home/yves/dev/github/perso/salesforce-marketing-poc/soap/src/main/resources/CXFBindings.xml, -p, org.talend.poc.salesforce.marketing.generated, file:/home/yves/dev/github/perso/salesforce-marketing-poc/soap/src/main/resources/SalesforceMarketing.wsdl]
