@@ -120,7 +120,7 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
     @Disabled
     public void retrieveAssets() throws IOException, InterruptedException, JAXBException {
         // This is the service
-        PartnerAPI partnerAPI = new PartnerAPI();
+        PartnerAPI partnerAPI = new PartnerAPI(new org.apache.cxf.ext.logging.LoggingFeature());
 
         // This is the port
         SalesforceMarketingSOAP salesforceMarketingSOAP = partnerAPI.getPort(SalesforceMarketingSOAP.class);
@@ -128,8 +128,8 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
 
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
-        retrieveRequest.setObjectType("Link");
-        retrieveRequest.setQueryAllAccounts(true);
+        retrieveRequest.setObjectType("Asset");
+        retrieveRequest.setQueryAllAccounts(false);
 
         RetrieveOptions retrieveOptions = new RetrieveOptions();
         retrieveOptions.setBatchSize(500);
@@ -157,7 +157,7 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
         InputStream confLogStream = SalesforceMarketingSoapTest.class.getResourceAsStream("/log.conf");
         LogManager.getLogManager().readConfiguration(confLogStream);
 
-        Logger ClientImplLogger = Logger.getLogger("org.apache.cxf.endpoint.ClientImpl");
+        Logger ClientImplLogger = Logger.getLogger("");
         FileHandler fh = new FileHandler("/tmp/ClientImpl.log", false);
         fh.setLevel(Level.ALL);
         ClientImplLogger.addHandler(fh);
@@ -167,13 +167,15 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
         SalesforceMarketingSOAP salesforceMarketingSOAP = partnerAPI.getPort(SalesforceMarketingSOAP.class);
         setOAuthTokenInSOAPMessage(salesforceMarketingSOAP);
 
+        long index = 19L;
+
         Asset asset = new Asset();
-        asset.setName("SOAP Asset 1");
-        asset.setContent("A content from SOAP.");
+        asset.setName("SOAP Asset " + index);
+        asset.setContent("A content from SOAP: " + index);
 
         QName qName = new QName("http://exacttarget.com/wsdl/partnerAPI", "Id");
         NameIdReference nameIdReference = new NameIdReference();
-        JAXBElement<Long> longJAXBElement = new JAXBElement<Long>(qName, Long.class, 1L);
+        JAXBElement<Long> longJAXBElement = new JAXBElement<Long>(qName, Long.class, index);
         nameIdReference.setId(longJAXBElement);
         asset.setAssetType(nameIdReference);
 
@@ -244,7 +246,7 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
 
     public static class MyOutInterceptor extends AbstractPhaseInterceptor<Message> {
         public MyOutInterceptor(String id, String phase, boolean uniq) {
-            super(id+"/"+phase, phase, uniq);
+            super(id + "/" + phase, phase, uniq);
         }
 
         @Override
@@ -257,14 +259,14 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
 
     public static class DisplayXMLInterceptor extends AbstractPhaseInterceptor<Message> {
         public DisplayXMLInterceptor(String id, String phase, boolean uniq) {
-            super("DisplayXML/" + id+"/"+phase, phase, uniq);
+            super("DisplayXML/" + id + "/" + phase, phase, uniq);
         }
 
         @Override
         public void handleMessage(Message message) throws Fault {
             try {
                 InputStream is = message.getContent(InputStream.class);
-                if(is == null){
+                if (is == null) {
                     System.out.println("INPUT STREAM is NULL !!!!!!!!!!!!!!!!!!!!!!!!!!");
                     return;
                 }
@@ -304,7 +306,7 @@ public class SalesforceMarketingSoapTest extends AbstractTest {
     }
 
     @Test
-    public void displayToken(){
+    public void displayToken() {
         System.out.println("=> TOKEN\n" + token + "\n---------------------");
     }
 
